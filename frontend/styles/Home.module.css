@@ -1,0 +1,180 @@
+.container {
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #f1f5f9;
+}
+
+.header {
+  background-color: #1e293b; /* Slate 800 - dark esportivo moderno */
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky; /* Mantém header preso pra acessar carrinho fácil */
+  top: 0;
+  z-index: 50;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+.cartButton {
+  position: relative;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background-color: #ef4444; /* Red / Vermelho agressivo padrão Netshoes de Ação */
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.hero {
+  background-color: white;
+  padding: 40px 20px;
+  text-align: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.heroTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.heroSubtitle {
+  color: #64748b;
+  font-size: 1rem;
+}
+
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* GRIDS MOBILE-FIRST IMPLACAVEIS */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr; /* 100% de largura no mobile p/ ver bem a camisa */
+  gap: 24px;
+}
+
+/* Escalando grid dinamicamente via @media sem destruir devices lentos */
+@media (min-width: 640px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 900px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1200px) {
+  .grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-4px); /* Animação Floating B2C */
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+
+.imageBox {
+  width: 100%;
+  aspect-ratio: 1; /* Previne o "Pulo/Tremor" de tela (Cumulative Layout Shift) */
+  background-color: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.cardInfo {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.category {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.productName {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 12px;
+  line-height: 1.4;
+  flex: 1; /* Empurra o painel de preço pro final igual o Flexbox */
+}
+
+.priceBox {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.oldPrice {
+  font-size: 0.8rem;
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+.currentPrice {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0ea5e9; /* Sky blue esportivo */
+}
+
+.buyBtn {
+  background-color: #1e293b;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: background-color 0.2s;
+}
+
+.buyBtn:hover {
+  background-color: #0f172a;
+}

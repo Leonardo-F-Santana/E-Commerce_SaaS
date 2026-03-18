@@ -1,0 +1,24 @@
+import uuid
+import datetime
+import enum
+from sqlalchemy import Column, String, DateTime, Enum
+from sqlalchemy.dialects.postgresql import UUID
+from .base import TenantAwareBase
+
+class RoleEnum(str, enum.Enum):
+    MASTER_ADMIN = "MASTER_ADMIN" # Administrador do SaaS (Nós)
+    TENANT_ADMIN = "TENANT_ADMIN" # Administrador do Lojista (Dono da loja)
+    CUSTOMER = "CUSTOMER"         # Cliente final comprando a camisa
+
+class User(TenantAwareBase):
+    """
+    Modelo de Usuário. Ao herdar TenantAwareBase, garantimos que um Cliente (Customer) 
+    logado numa loja X jamais veja dados da loja Y.
+    """
+    __tablename__ = "users"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    email = Column(String, nullable=False, index=True)
+    hashed_password = Column(String, nullable=False)
+    role = Column(Enum(RoleEnum), nullable=False, default=RoleEnum.CUSTOMER)
+    full_name = Column(String)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)

@@ -1,0 +1,132 @@
+.navbar {
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); /* Sombra elegante pra desconectar do corpo */
+}
+
+/* 1. Fileira Superior: Escura (Corporate Dark) */
+.topBar {
+  background-color: #1e293b; /* Slate 800 - Padrão Alto Esporte */
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topBarLeft {
+  display: flex;
+  align-items: center;
+}
+
+.hamburgerBtn {
+  display: none; /* Invisível no Desktop/Tablet grande */
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-right: 16px;
+  line-height: 1;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: white;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.cartButton {
+  position: relative;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background-color: #0ea5e9; /* Sky Corporate Ciano brilhante para contrastar no escuro */
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+/* 2. Fileira Inferior: Clean Clara para Categorias */
+.bottomBar {
+  background-color: white;
+  border-bottom: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.categoryList {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-x: auto; /* Permite scrollzinho em tablets pequenos sem quebrar a tela */
+}
+
+.categoryItem {
+  padding: 16px 20px;
+}
+
+.categoryLink {
+  color: #475569; /* Slate 600 */
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: color 0.2s ease-in-out;
+  white-space: nowrap;
+}
+
+.categoryLink:hover {
+  color: #0ea5e9; /* Sky 500 Highlight Moderno */
+}
+
+/* Ofertas Highlights Especiais */
+.ofertas {
+  color: #ef4444; /* Vermelho Redpill pra Promoções Extrema */
+}
+.ofertas:hover {
+  color: #dc2626;
+}
+
+/* MOBILE FIRST: Comportamentos que ligam abaixo de 768px (Smartphones) */
+@media (max-width: 768px) {
+  .hamburgerBtn {
+    display: block; /* Revela botão */
+  }
+  
+  .categoryList {
+    flex-direction: column;
+    align-items: stretch;
+    display: none; /* Esconde e Colapsa por Padrão para liberar a tela */
+  }
+
+  /* Classe injetora que o React vai ativar/desativar */
+  .categoryListOpen {
+    display: flex; 
+  }
+
+  .categoryItem {
+    border-bottom: 1px solid #f1f5f9;
+    padding: 16px 20px;
+  }
+}

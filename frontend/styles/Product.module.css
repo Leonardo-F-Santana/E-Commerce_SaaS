@@ -1,0 +1,196 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  /* Fonte desenhada para performance e alta legibilidade (Inter) */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #333;
+}
+
+.breadcrumb {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.breadcrumb a {
+  color: #0056b3;
+  text-decoration: none;
+}
+
+/* MOBILE FIRST - Direção em coluna para empilhar TUDO no celular */
+.productWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.imageContainer {
+  width: 100%;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  /* Garante Layout Shift cumulativo nulo ao usar SSR */
+  aspect-ratio: 1; 
+}
+
+.image {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+  color: #1a1a1a;
+}
+
+.priceWrapper {
+  display: flex;
+  flex-direction: column;
+  background: #fdfdfd;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #eaeaea;
+}
+
+.oldPrice {
+  font-size: 0.875rem;
+  text-decoration: line-through;
+  color: #888;
+}
+
+.currentPrice {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #e53935; /* Fator "Urgência" estilo Netshoes */
+  margin: 4px 0;
+  letter-spacing: -1px;
+}
+
+.installments {
+  font-size: 0.875rem;
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.sizeSection {
+  margin-top: 8px;
+}
+
+.sizeTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #555;
+  text-transform: uppercase;
+}
+
+.sizeGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.sizeButton {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 14px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #333;
+}
+
+.sizeButton:hover {
+  border-color: #1a1a1a;
+}
+
+.sizeButtonActive {
+  background-color: #1a1a1a;
+  color: #fff;
+  border-color: #1a1a1a;
+  transform: scale(1.05); /* Micro-animação visual */
+}
+
+.buyButton {
+  margin-top: 16px;
+  background-color: #00a650; /* Verde de altíssima conversão de Checkout (Padrão Mercado Livre/Shopee) */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 18px 24px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  width: 100%;
+  box-shadow: 0 8px 16px rgba(0, 166, 80, 0.25);
+}
+
+.buyButton:hover {
+  background-color: #008c44;
+}
+
+.buyButton:active {
+  transform: translateY(2px); /* Efeito tátil */
+  box-shadow: 0 4px 8px rgba(0, 166, 80, 0.25);
+}
+
+.descriptionSection {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #eaeaea;
+}
+
+.descriptionTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.descriptionText {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #444;
+}
+
+/* DESKTOP STYLES - Breakpoint padrão de 768px */
+@media (min-width: 768px) {
+  .productWrapper {
+    flex-direction: row;
+    gap: 56px;
+    align-items: flex-start;
+  }
+
+  .imageContainer {
+    flex: 6; /* 60% da tela */
+    position: sticky; /* Mantém a imagem presa enquanto rola o detalhe */
+    top: 32px;
+  }
+
+  .infoContainer {
+    flex: 4; /* 40% da tela */
+    max-width: 480px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+}
