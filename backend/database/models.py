@@ -55,7 +55,7 @@ class UserModel(TenantAwareBase):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     email = Column(String, nullable=False, index=True)
     hashed_password = Column(String, nullable=False)
-    role = Column(Enum(RoleEnum), nullable=False, default=RoleEnum.CUSTOMER)
+    role = Column(Enum(RoleEnum), nullable=False, default=RoleEnum.customer)
     full_name = Column(String)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     
@@ -80,6 +80,18 @@ class ProductModel(TenantAwareBase):
     
     tenant = relationship("TenantModel", back_populates="products")
     variations = relationship("ProductVariationModel", back_populates="product", cascade="all, delete-orphan")
+    images = relationship("ProductImageModel", back_populates="product", cascade="all, delete-orphan")
+
+class ProductImageModel(Base):
+    """
+    Galeria Múltipla. 1 Produto pode carregar Várias Imagens (Thumbnails e Carrossel).
+    """
+    __tablename__ = "product_images"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    product_id = Column(UUID(as_uuid=True), ForeignKey("products.id"), nullable=False)
+    url = Column(String, nullable=False)
+    
+    product = relationship("ProductModel", back_populates="images")
 
 class ProductVariationModel(Base):
     """

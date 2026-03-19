@@ -19,31 +19,68 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  const login = async (email, password) => {
-    // MOCK LOGIN - Simula a chamada da API FastAPI (Token JWT + Informação do Tenant_ID)
-    if (email === 'admin@loja.com' && password === '123456') {
-      const mockUser = { id: 1, email, name: 'João (Lojista)', role: 'TENANT_ADMIN' };
-      const mockToken = 'abc123_jwt_token_verificado';
-
-      localStorage.setItem('@ecomm:token', mockToken);
-      localStorage.setItem('@ecomm:user', JSON.stringify(mockUser));
-      setUser(mockUser);
-      
-      router.push('/admin/dashboard');
-      return true;
+  const register = async (name, email, password) => {
+    try {
+      const response = await fetch("http://localhost:8000/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password, role: 'customer' })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || "Erro na base Python API");
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.message };
     }
-    return false;
+  };
+
+  const login = async (email, password) => {
+    try {
+      const formData = new URLSearchParams();
+      formData.append('username', email);
+      formData.append('password', password);
+
+      const response = await fetch("http://localhost:8000/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData.toString()
+      });
+
+      if (!response.ok) {
+         const errData = await response.json();
+         throw new Error(errData.detail || "Credenciais Incorretas.");
+      }
+
+      const data = await response.json();
+      // Emula o nome a partir do email (em prod veriamos FullName extraído da API)
+      const loadedRole = data.role ? data.role.toLowerCase() : 'customer';
+      const loadedUser = { id: data.sub, email, name: email.split('@')[0], role: loadedRole, tenant_id: data.tenant_id };
+      
+      localStorage.setItem('@ecomm:token', data.access_token);
+      localStorage.setItem('@ecomm:user', JSON.stringify(loadedUser));
+      setUser(loadedUser);
+      
+      if (loadedUser.role === 'customer') {
+         router.push('/');
+      } else {
+         router.push('/admin/dashboard');
+      }
+      return { success: true };
+    } catch (error) {
+      console.error(`[AuthContext] Falha Crítica ao tentar realizar POST na URL: ${url}`, error);
+      return { success: false, error: `${error.message} - Verifique se a URL ${url} está acessível.` };
+    }
   };
 
   const logout = () => {
     localStorage.removeItem('@ecomm:token');
     localStorage.removeItem('@ecomm:user');
     setUser(null);
-    router.push('/admin/login');
+    router.push('/');
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!user, user, loading, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated: !!user, user, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

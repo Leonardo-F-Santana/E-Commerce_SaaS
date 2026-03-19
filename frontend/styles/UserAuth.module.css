@@ -1,0 +1,222 @@
+.authContainer {
+  position: relative;
+  font-family: 'Inter', 'Poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding-right: 24px;
+  margin-right: 24px;
+}
+
+/* =========================================================
+   1. ESTADO DESLOGADO: Efeito Call-To-Action Sofisticado
+========================================================= */
+.loginLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #cbd5e1; /* Slate 300 base */
+  transition: all 0.3s ease;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+}
+
+.loginLink:hover {
+  color: #ffffff;
+  border-bottom: 2px solid #0ea5e9; /* Sporty Blue - Destaque Clean Netshoes */
+}
+
+.userIcon {
+  font-size: 1.4rem;
+  margin-right: 10px;
+}
+
+.loginTextWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.loginTextPrimary {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.loginTextSecondary {
+  font-size: 0.75rem;
+  font-weight: 300;
+  color: #94a3b8;
+}
+
+/* =========================================================
+   2. ESTADO LOGADO: Avatar UI 
+========================================================= */
+.userProfile {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px 0;
+  position: relative;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #334155;
+  object-fit: cover;
+  margin-right: 12px;
+  transition: border-color 0.3s ease;
+}
+
+.userProfile:hover .avatar {
+  border-color: #0ea5e9;
+}
+
+.greetingWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.greetingText {
+  font-size: 0.65rem;
+  font-weight: 400;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.greetingName {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+/* =========================================================
+   3. O DROPDOWN MENU FLUTUANTE MÁGICO 
+========================================================= */
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 15px);
+  right: -10px;
+  width: 240px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15); /* Sombra pesada para criar Profundidade Y */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 100;
+  padding: 8px 0;
+  border: 1px solid #e2e8f0;
+}
+
+/* Acionadores do Menu */
+.userProfile:hover .dropdownMenu, 
+.dropdownMenu:hover {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Triângulo superior (Balloon CSS) */
+.dropdownMenu::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 28px;
+  width: 12px;
+  height: 12px;
+  background-color: #ffffff;
+  transform: rotate(45deg);
+  border-left: 1px solid #e2e8f0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.dropItem {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: #334155;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.2s, color 0.2s;
+  cursor: pointer;
+}
+
+.dropItem:hover {
+  background-color: #f8fafc;
+  color: #0ea5e9;
+}
+
+.dropIcon {
+  margin-right: 14px;
+  font-size: 1.15rem;
+  color: #64748b;
+  display: flex;
+  justify-content: center;
+  width: 20px;
+}
+
+.dropItem:hover .dropIcon {
+  color: #0ea5e9;
+}
+
+.dropDivider {
+  height: 1px;
+  background-color: #f1f5f9;
+  margin: 6px 0;
+}
+
+.logoutItem {
+  color: #ef4444;
+  cursor: pointer;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+}
+
+.logoutItem:hover {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.logoutItem:hover .dropIcon {
+  color: #dc2626;
+}
+
+/* =========================================================
+   4. RESPONSIVIDADE PESA: Mobile First (Space Saving)
+========================================================= */
+@media (max-width: 768px) {
+  .loginTextWrap, .greetingWrap {
+    display: none; /* Extrema limpeza em telas de 300px width */
+  }
+  
+  .userIcon {
+    margin-right: 0;
+    font-size: 1.6rem;
+  }
+  
+  .avatar {
+    margin-right: 0;
+  }
+  
+  .authContainer {
+    padding-right: 16px;
+    margin-right: 16px;
+  }
+
+  /* Reposiciona o balão pro celular pra não quebrar a tela a direita */
+  .dropdownMenu {
+    right: -20px;
+  }
+  .dropdownMenu::before {
+    right: 38px;
+  }
+}

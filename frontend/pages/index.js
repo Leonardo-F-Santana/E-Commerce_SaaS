@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
@@ -6,51 +7,36 @@ import BannerCarousel from '../components/BannerCarousel';
 import PromoCards from '../components/PromoCards';
 import ProductCard from '../components/ProductCard';
 
-// Em um ambiente de produção Fast-API isso derivaria de uma busca no banco (getStaticProps para SSG super veloz)
-const MOCK_CATALOG = [
-  {
-    id: 1,
-    slug: 'camisa-real-madrid-home-23-24',
-    name: 'Camisa Real Madrid Home 24/25',
-    category: 'Clubes',
-    price: 299.90,
-    oldPrice: 349.90,
-    tenant_id: 'loja_1',
-    images: ["https://images.unsplash.com/photo-1596516641571-70bfca19fb36?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=600&q=80"]
-  },
-  {
-    id: 2,
-    slug: 'camisa-brasil-away-2024',
-    name: 'Camisa Seleção Brasileira 2024',
-    category: 'Seleções',
-    price: 349.90,
-    oldPrice: null,
-    tenant_id: 'loja_1',
-    images: ["https://images.unsplash.com/photo-1508344928928-7165b67de128?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=600&q=80"]
-  },
-  {
-    id: 3,
-    slug: 'camisa-vasco-oficial',
-    name: 'Camisa Vasco Oficial 24/25',
-    category: 'Clubes',
-    price: 279.90,
-    oldPrice: 299.90,
-    tenant_id: 'loja_1',
-    images: ["https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1518605368461-1ee0618eb7dc?auto=format&fit=crop&w=600&q=80"]
-  },
-  {
-    id: 4,
-    slug: 'camisa-flamengo-home-24',
-    name: 'Camisa Flamengo Home 24/25',
-    category: 'Clubes',
-    price: 329.00,
-    oldPrice: 399.00,
-    tenant_id: 'loja_1',
-    images: ["https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&w=600&q=80"]
-  }
-];
-
 export default function Home() {
+  // [DIRETRIZ DE C-LEVEL FETCHING] - Substituindo os Mocks pela Rota Viva Python!
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Efeito Re-ativo do React. O 'cache: no-store' faria o Edge Next.JS atirar fora lixos de revalidação antigos.
+    const fetchCatalog = async () => {
+      try {
+        // [DIRETRIZ DE REVALIDAÇÃO] 'no-store' inibe L3 Cache (Obrigando o NextJS a ir buscar a última camisa cadastrada)
+        const res = await fetch("http://localhost:8000/products/", { cache: 'no-store' });
+        if (!res.ok) throw new Error("Erro L3 Fetch Database");
+        
+        const data = await res.json();
+        // Fallback robusto pra vitrine nunca quebrar caso array venha mal formatado
+        const safeData = data.map(p => ({
+            ...p,
+            images: p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1596516641571-70bfca19fb36?auto=format&fit=crop&w=600&q=80"]
+        }));
+        
+        setProducts(safeData);
+        setIsLoading(false);
+      } catch (err) {
+        console.error("[Vitrine Fallback]", err);
+        setIsLoading(false);
+      }
+    };
+    fetchCatalog();
+  }, []);
+
   return (
     <div className={styles.container}>
       {/* Vitals do Next.JS e Motores de Busca (SEO do Google não sofre bloqueios) */}
@@ -72,11 +58,25 @@ export default function Home() {
       </section>
 
       <main className={styles.main}>
-        <div className={styles.grid}>
-          {MOCK_CATALOG.map(product => (
-            <ProductCard key={product.id || product.slug} product={product} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div style={{ textAlign: 'center', padding: '80px 0', width: '100%', gridColumn: '1 / -1' }}>
+            {/* SPINNER ANIMADO W3C PURO */}
+            <div className={styles.spinner} style={{ border: '4px solid rgba(0,0,0,0.05)', width: '45px', height: '45px', borderRadius: '50%', borderLeftColor: '#0ea5e9', borderRightColor: '#ea580c', animation: 'spin 0.8s linear infinite', margin: '0 auto 20px' }} />
+            <style jsx>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+            <h2 style={{ color: '#475569', fontSize: '1.3rem', fontWeight: '800' }}>Invocando Carga do Banco de Dados...</h2>
+            <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '6px' }}>Autenticando Arquivos de Midia via Fast API.</p>
+          </div>
+        ) : products.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '40px 0', width: '100%', gridColumn: '1 / -1' }}>
+            <h2 style={{ color: '#cbd5e1' }}>❌ O Lojista limpou o Estoque. Nenhuma Manto foi encontrado!</h2>
+          </div>
+        ) : (
+          <div className={styles.grid}>
+            {products.map(product => (
+              <ProductCard key={product.id || product.slug} product={product} />
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

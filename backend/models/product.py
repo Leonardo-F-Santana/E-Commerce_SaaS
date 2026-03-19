@@ -1,7 +1,7 @@
 import uuid
 import datetime
 import enum
-from sqlalchemy import Column, String, Integer, Float, DateTime, Boolean, Enum, ForeignKey
+from sqlalchemy import Column, String, Integer, Float, DateTime, Boolean, Enum, ForeignKey, Numeric
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 from .base import Base, TenantAwareBase
@@ -19,10 +19,12 @@ class Product(TenantAwareBase):
     Camisa de Futebol. Isolada por tenant.
     """
     __tablename__ = "products"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    name = Column(String, nullable=False) 
-    description = Column(String)
-    price = Column(Float, nullable=False)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    name = Column(String(255), nullable=False)
+    description = Column(String, nullable=True)
+    price = Column(Numeric(10, 2), nullable=False)
+    promo_price = Column(Numeric(10, 2), nullable=True) # [NOVO] Desconto Especial Lojista
+    image_url = Column(String(500), nullable=True)      # [NOVO] Fila local do Upload File-System Front-End
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     

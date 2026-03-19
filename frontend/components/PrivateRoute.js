@@ -3,28 +3,35 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function PrivateRoute({ children }) {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    // Se o loading terminou e o cara NÃO está logado, expulsa sumariamente para a tela de Login
+    // Escudo Ouro 1: Deslogado
     if (!loading && !isAuthenticated) {
-      router.push('/admin/login');
+      router.push('/login');
     }
-  }, [loading, isAuthenticated, router]);
+    
+    // [RBAC] Escudo Ouro 2: Se tentar acessar a rota sendo mero Consumidor da Loja
+    if (!loading && isAuthenticated && user) {
+      if (user.role !== 'vendor' && user.role !== 'superadmin') {
+        // Redireciona customer invasor devolta 
+        router.push('/login');
+      }
+    }
+  }, [loading, isAuthenticated, user, router]);
 
-  // Tela de WaitState (Evita "Piscadas" assíncronas do React enquanto confere o token local)
   if (loading) {
     return (
       <div style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'sans-serif', color: '#666'}}>
-        Carregando o painel de administração...
+        Analisando Criptografia de Cargos (RBAC)...
       </div>
     );
   }
 
-  // Intercepta a montagem se o cara é intruso
+  // Interceptação Nativa ReAtiva para Blindagem 100% de Client-Side Render
   if (!isAuthenticated) return null;
+  if (user && user.role === 'customer') return null;
 
-  // Se tem token e acesso de Lojista aprovado, permite renderizar!
   return children;
 }

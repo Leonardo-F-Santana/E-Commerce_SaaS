@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useCart } from '../contexts/CartContext';
+import UserAuth from './UserAuth'; // Injeção do Módulo Premium B2C
 import styles from '../styles/Navbar.module.css';
 
 export default function Navbar() {
@@ -24,13 +25,18 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Carrinho flutuante (Sem hydration mismatch graças ao isLoaded) */}
-        <Link href="/cart" className={styles.cartButton}>
-          🛒 Carrinho
-          {isLoaded && getCartCount() > 0 && (
-            <span className={styles.cartBadge}>{getCartCount()}</span>
-          )}
-        </Link>
+        <div className={styles.topBarRight}>
+          {/* Componente Netshoes-Style de Autenticação UX */}
+          <UserAuth />
+
+          {/* Carrinho flutuante */}
+          <Link href="/cart" className={styles.cartButton}>
+            🛒
+            {isLoaded && getCartCount() > 0 && (
+              <span className={styles.cartBadge}>{getCartCount()}</span>
+            )}
+          </Link>
+        </div>
       </div>
 
       {/* SECTION 2: Barra Light Links Clean */}

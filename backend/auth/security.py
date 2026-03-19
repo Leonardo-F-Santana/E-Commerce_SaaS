@@ -2,6 +2,9 @@ from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+import logging
+
+logger = logging.getLogger("uvicorn.error")
 
 # ATENÇÃO: Carregar do .env em produção
 SECRET_KEY = "SUACHAVESECRETASUPERSEGURAPRODUCAO"
@@ -16,8 +19,18 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 def get_password_hash(password: str) -> str:
-    """Hasheamento Bcrypt seguro."""
-    return pwd_context.hash(password)
+    """Hasheamento Bcrypt seguro com Patching contra o Limite de 72 Bytes C-Module"""
+    try:
+        # Converte para bytes UTF-8 para fatiamento absoluto de buffer
+        password_bytes = password.encode('utf-8')[:72]
+        
+        # Descodifica ignorando pedaços zumbis para a lib processar sem CRASH
+        safe_password_string = password_bytes.decode('utf-8', 'ignore')
+        return pwd_context.hash(safe_password_string)
+    except Exception as e:
+        logger.error(f"[SECURITY SHIELD - BCRYPT CRASH]: Tentativa de Hash Falhou com a biblioteca passlib: {e}")
+        # A exceção é barrada para evitar Freeze e devolvida em escopo manejável
+        raise ValueError("O Motor de Criptografia colapsou ao processar os caracteres informados.")
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     """

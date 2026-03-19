@@ -17,9 +17,80 @@
   align-items: center;
 }
 
-.topBarLeft {
+.topBarLeft, .topBarRight {
   display: flex;
   align-items: center;
+}
+
+/* Área de Autenticação UX Limpa B2C */
+.authArea {
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #334155; /* Divisória Sutil Elegante parecida com E-commerces de Alto Padrão */
+  padding-right: 20px;
+  margin-right: 20px;
+}
+
+.userGreeting {
+  display: flex;
+  flex-direction: column;
+  margin-right: 12px;
+}
+
+.greetingText {
+  font-size: 0.70rem;
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.userName {
+  color: white;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.userName:hover {
+  text-decoration: underline;
+}
+
+.logoutTextBtn {
+  background: none;
+  border: none;
+  color: #ef4444; /* Vermelho deslogar (Atenção C-Level) */
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  margin-left: 12px;
+}
+
+.logoutTextBtn:hover {
+  color: #f87171;
+  text-decoration: underline;
+}
+
+.loginBtn {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  color: white;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #475569;
+  transition: all 0.2s;
+  margin-right: 20px;
+}
+
+.loginBtn:hover {
+  background-color: #334155;
+  border-color: #64748b;
 }
 
 .hamburgerBtn {

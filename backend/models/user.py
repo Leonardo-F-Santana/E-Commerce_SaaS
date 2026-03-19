@@ -6,9 +6,9 @@ from sqlalchemy.dialects.postgresql import UUID
 from .base import TenantAwareBase
 
 class RoleEnum(str, enum.Enum):
-    MASTER_ADMIN = "MASTER_ADMIN" # Administrador do SaaS (Nós)
-    TENANT_ADMIN = "TENANT_ADMIN" # Administrador do Lojista (Dono da loja)
-    CUSTOMER = "CUSTOMER"         # Cliente final comprando a camisa
+    superadmin = "superadmin"
+    vendor = "vendor"
+    customer = "customer"
 
 class User(TenantAwareBase):
     """
@@ -19,6 +19,6 @@ class User(TenantAwareBase):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     email = Column(String, nullable=False, index=True)
     hashed_password = Column(String, nullable=False)
-    role = Column(Enum(RoleEnum), nullable=False, default=RoleEnum.CUSTOMER)
+    role = Column(Enum(RoleEnum), nullable=False, default=RoleEnum.customer)
     full_name = Column(String)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
